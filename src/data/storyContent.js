@@ -5,7 +5,7 @@ export const storyPanels = [
   {
     id: 1,
     title: "Oliver's Baking Adventure",
-    image: null, // will use emoji illustration
+    image: "/images/slide1.png",
     imageEmoji: "🥐",
     imageCaption: "0.5 cup of flour",
     imageBg: "linear-gradient(135deg, #1a1060 0%, #3d1a8a 50%, #1a0a3e 100%)",
@@ -18,7 +18,7 @@ export const storyPanels = [
   {
     id: 2,
     title: "The Hundred-Square Grid",
-    image: null,
+    image: "/images/slide2.png",
     imageEmoji: "🟨",
     imageCaption: "1 row = 0.1 (one tenth)",
     imageBg: "linear-gradient(135deg, #0d1b3e 0%, #1a237e 50%, #0a0a2e 100%)",
@@ -31,7 +31,7 @@ export const storyPanels = [
   {
     id: 3,
     title: "Sophie Needs 0.75 Cup",
-    image: null,
+    image: "/images/slide3.png",
     imageEmoji: "🫙",
     imageCaption: "0.75 = 75 hundredths",
     imageBg: "linear-gradient(135deg, #1a0a3e 0%, #4a1060 50%, #2d1b69 100%)",
@@ -44,7 +44,7 @@ export const storyPanels = [
   {
     id: 4,
     title: "Comparing on the Number Line",
-    image: null,
+    image: "/images/slide4.png",
     imageEmoji: "📏",
     imageCaption: "0.5 is less than 0.75",
     imageBg: "linear-gradient(135deg, #0a1a2e 0%, #1a3a6e 50%, #0d1b3e 100%)",
