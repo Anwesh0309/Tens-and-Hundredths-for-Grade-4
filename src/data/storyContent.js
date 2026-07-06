@@ -1,0 +1,57 @@
+// Story Phase — "Oliver's Baking Adventure"
+// 4 illustrated panels, CPA progression for Decimals
+
+export const storyPanels = [
+  {
+    id: 1,
+    title: "Oliver's Baking Adventure",
+    image: null, // will use emoji illustration
+    imageEmoji: "🥐",
+    imageCaption: "0.5 cup of flour",
+    imageBg: "linear-gradient(135deg, #1a1060 0%, #3d1a8a 50%, #1a0a3e 100%)",
+    body: "Oliver is baking croissants for his family. The recipe says he needs 0.5 cup of flour. Oliver wonders — how much is 0.5 exactly?",
+    questionChip: '"Is 0.5 more or less than a whole cup?"',
+    mascotCaption: "Let's help Oliver measure the flour! 🥐",
+    mathFact: "0.5 = five-tenths = 5/10 of a cup",
+    highlight: "0.5",
+  },
+  {
+    id: 2,
+    title: "The Hundred-Square Grid",
+    image: null,
+    imageEmoji: "🟨",
+    imageCaption: "1 row = 0.1 (one tenth)",
+    imageBg: "linear-gradient(135deg, #0d1b3e 0%, #1a237e 50%, #0a0a2e 100%)",
+    body: "Oliver draws a 10×10 grid. Each square is one hundredth (0.01). A full row of 10 squares is one tenth (0.1). He shades 5 rows to show 0.5 — exactly half the grid!",
+    questionChip: '"How many squares make 0.5?"',
+    mascotCaption: "50 squares shaded = 50/100 = 0.5! 🟨",
+    mathFact: "5 rows × 10 squares = 50 squares = 0.5",
+    highlight: "50 squares",
+  },
+  {
+    id: 3,
+    title: "Sophie Needs 0.75 Cup",
+    image: null,
+    imageEmoji: "🫙",
+    imageCaption: "0.75 = 75 hundredths",
+    imageBg: "linear-gradient(135deg, #1a0a3e 0%, #4a1060 50%, #2d1b69 100%)",
+    body: "Oliver's sister Sophie needs 0.75 cup of sugar. She says: \"That's 7 tenths and 5 hundredths!\" She shades 75 squares on her grid — 7 full rows and 5 more squares.",
+    questionChip: '"Which is more — 0.5 or 0.75?"',
+    mascotCaption: "0.75 has more shaded squares than 0.5! 🫙",
+    mathFact: "0.75 = 7 tenths + 5 hundredths = 75/100",
+    highlight: "0.75",
+  },
+  {
+    id: 4,
+    title: "Comparing on the Number Line",
+    image: null,
+    imageEmoji: "📏",
+    imageCaption: "0.5 is less than 0.75",
+    imageBg: "linear-gradient(135deg, #0a1a2e 0%, #1a3a6e 50%, #0d1b3e 100%)",
+    body: "Oliver and Sophie place their numbers on a number line from 0 to 1. 0.5 lands right in the middle. 0.75 is between 0.5 and 1. Compare tenths first — 7 > 5, so 0.75 > 0.5!",
+    questionChip: '"What comes between 0.5 and 0.75?"',
+    mascotCaption: "Always compare the tenths digit first! 📏",
+    mathFact: "0 < 0.5 < 0.75 < 1",
+    highlight: "tenths digit",
+  },
+];
