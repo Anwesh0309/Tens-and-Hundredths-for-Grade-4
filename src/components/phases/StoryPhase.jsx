@@ -5,7 +5,6 @@ import { storyPanels } from '../../data/storyContent.js';
 
 export default function StoryPhase({ onComplete, audioEnabled }) {
   const [panelIndex, setPanelIndex] = useState(0);
-  const [imgLoaded, setImgLoaded] = useState(Array(4).fill(false));
   const narRef = useRef(null);
 
   const panel = storyPanels[panelIndex];
@@ -19,10 +18,6 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
     }, 400);
     return () => { clearTimeout(timer); };
   }, [panelIndex, audioEnabled]);
-
-  const handleImgLoad = (i) => {
-    setImgLoaded(prev => { const n = [...prev]; n[i] = true; return n; });
-  };
 
   const goNext = () => {
     if (panelIndex < total - 1) setPanelIndex(panelIndex + 1);
@@ -57,18 +52,21 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
           style={{ background: panel.imageBg }}
           aria-label={`Story illustration: ${panel.title}`}
         >
-          <img
-            src={panel.image}
-            alt={panel.title}
-            style={{
-              width: '100%', height: '100%', objectFit: 'cover',
-              opacity: imgLoaded[panelIndex] ? 1 : 0,
-              transition: 'opacity 0.5s ease',
-              position: 'absolute', top: 0, left: 0
-            }}
-            onLoad={() => handleImgLoad(panelIndex)}
-            loading="eager"
-          />
+          {panel.image ? (
+            <img
+              src={panel.image}
+              alt={panel.title}
+              style={{
+                width: '100%', height: '100%', objectFit: 'cover',
+                position: 'absolute', top: 0, left: 0
+              }}
+              loading="eager"
+            />
+          ) : (
+            <div className="story-image-placeholder">
+              <div className="story-image-emoji" aria-hidden="true">{panel.imageEmoji}</div>
+            </div>
+          )}
           {/* Always show emoji caption */}
           <div style={{
             position: 'absolute', bottom: 12, left: '50%',
@@ -78,12 +76,6 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
               ✨ {panel.imageCaption}
             </div>
           </div>
-          {/* Overlay emoji if image not loaded */}
-          {!imgLoaded[panelIndex] && (
-            <div className="story-image-placeholder">
-              <div className="story-image-emoji" aria-hidden="true">{panel.imageEmoji}</div>
-            </div>
-          )}
         </div>
 
         {/* Text panel */}
@@ -151,4 +143,3 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
     </div>
   );
 }
-
