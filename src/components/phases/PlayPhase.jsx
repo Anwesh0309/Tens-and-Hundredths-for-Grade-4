@@ -119,17 +119,17 @@ export default function PlayPhase({
 
   if (view === 'map') {
     return (
-      <div className="play-screen" role="main" aria-label="Play Phase — World Map">
+      <div className="play-screen" role="main" aria-label="Practice Phase — World Map">
         <div style={{ textAlign: 'center' }}>
-          <h2 className="play-title">🎮 Play — Choose Your World!</h2>
+          <h2 className="play-title">🎮 Practice — Choose Your World!</h2>
           <p className="play-subtitle">Answer questions in each world. Earn stars and XP!</p>
         </div>
 
         <div className="world-grid" role="list">
           {WORLDS.map((world, i) => {
             const ws = worldScores[i];
-            // World 0 always unlocked; world N unlocked if world N-1 is completed (any score including 0)
-            const isUnlocked = i === 0 || worldScores[i - 1] !== null;
+            // World 0 unlocked by default; World N unlocked if World N-1 score >= 4
+            const isUnlocked = i === 0 || (worldScores[i - 1] !== null && worldScores[i - 1] >= 4);
             const isCompleted = ws !== null;
             const isCurrent = isUnlocked && !isCompleted;
             const stars = isCompleted ? calcStars(ws) : 0;
@@ -144,7 +144,7 @@ export default function PlayPhase({
                   isCompleted ? 'completed' : '',
                 ].join(' ')}
                 role="listitem"
-                aria-label={`${world.name}${!isUnlocked ? ' (locked)' : ''}`}
+                aria-label={`${world.name}${!isUnlocked ? ` (locked: score 4+ on World ${i})` : ''}`}
               >
                 {!isUnlocked && (
                   <span className="world-lock-icon" aria-hidden="true">🔒</span>
@@ -179,7 +179,11 @@ export default function PlayPhase({
                   >
                     ▶ PLAY
                   </button>
-                ) : null}
+                ) : (
+                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 4, textAlign: 'center' }}>
+                    Score 4+ on W{i} to unlock
+                  </span>
+                )}
               </div>
             );
           })}
@@ -270,6 +274,7 @@ export default function PlayPhase({
 
         <div className="options-grid" role="group" aria-label="Answer options">
           {currentQ.options.map((opt, i) => {
+            const letter = ['A', 'B', 'C', 'D'][i];
             let cls = 'option-btn';
             if (answered) {
               if (String(opt) === String(currentQ.correctAnswer)) cls += ' correct';
@@ -281,9 +286,10 @@ export default function PlayPhase({
                 className={cls}
                 onClick={() => handleAnswer(opt)}
                 disabled={answered}
-                aria-label={`Option: ${opt}`}
+                aria-label={`Option ${letter}: ${opt}`}
               >
-                {opt}
+                <span className="opt-letter">{letter}</span>
+                <span className="opt-val">{opt}</span>
               </button>
             );
           })}

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { narrate, say, cheer, stopNarration } from '../utils/audio.js';
 
-export default function IntroScreen({ onBegin, audioEnabled }) {
+export default function IntroScreen({ onBegin, audioEnabled, onToggleAudio }) {
   const narrationRef = useRef(null);
 
   useEffect(() => {
@@ -15,6 +15,15 @@ export default function IntroScreen({ onBegin, audioEnabled }) {
 
   return (
     <div className="intro-screen" role="main" aria-label="Lesson Introduction">
+      {/* Audio Mute Button centered above badge */}
+      <button
+        className="audio-btn intro-audio-btn"
+        onClick={onToggleAudio}
+        aria-label={audioEnabled ? 'Mute audio' : 'Unmute audio'}
+      >
+        {audioEnabled ? '🔊' : '🔇'}
+      </button>
+
       {/* Badge */}
       <div className="intro-badge" aria-label="Curriculum badge">
         ✨ Grade 4 · Decimals · Chapter 7
@@ -44,26 +53,32 @@ export default function IntroScreen({ onBegin, audioEnabled }) {
         <div className="intro-journey-title">Your Learning Journey</div>
         <div className="intro-journey-steps">
           {[
-            { icon: '🔍', name: 'Wonder', desc: 'Spark your curiosity' },
-            { icon: '→', name: '', desc: '' },
-            { icon: '📖', name: 'Story', desc: 'Hear the tale' },
-            { icon: '→', name: '', desc: '' },
-            { icon: '✏️', name: 'Simulate', desc: 'Explore & discover' },
-            { icon: '→', name: '', desc: '' },
-            { icon: '🎮', name: 'Play', desc: 'Test your skills' },
-            { icon: '→', name: '', desc: '' },
-            { icon: '🪞', name: 'Reflect', desc: 'What did you learn?' },
+            { id: 'wonder', icon: '🔍', name: 'Wonder', desc: 'Spark your curiosity' },
+            { id: null, icon: '→', name: '', desc: '' },
+            { id: 'story', icon: '📖', name: 'Story', desc: 'Hear the tale' },
+            { id: null, icon: '→', name: '', desc: '' },
+            { id: 'simulate', icon: '✏️', name: 'Simulate', desc: 'Explore & discover' },
+            { id: null, icon: '→', name: '', desc: '' },
+            { id: 'play', icon: '🎮', name: 'Practice', desc: 'Test your skills' },
+            { id: null, icon: '→', name: '', desc: '' },
+            { id: 'reflect', icon: '🪞', name: 'Reflect', desc: 'What did you learn?' },
           ].map((step, i) =>
             step.name === '' ? (
               <span key={i} className="intro-arrow" aria-hidden="true">→</span>
             ) : (
-              <div key={i} className="intro-step">
+              <button
+                key={i}
+                type="button"
+                className="intro-step clickable"
+                onClick={() => onBegin(step.id)}
+                aria-label={`Jump to ${step.name} phase`}
+              >
                 <div className="intro-step-icon" aria-hidden="true">{step.icon}</div>
                 <div className="intro-step-text">
                   <strong>{step.name}</strong>
                   <span>{step.desc}</span>
                 </div>
-              </div>
+              </button>
             )
           )}
         </div>
@@ -72,7 +87,7 @@ export default function IntroScreen({ onBegin, audioEnabled }) {
       {/* CTA */}
       <button
         className="btn btn-primary btn-lg"
-        onClick={onBegin}
+        onClick={() => onBegin('wonder')}
         aria-label="Begin your learning journey"
       >
         🚀 Begin Your Journey!

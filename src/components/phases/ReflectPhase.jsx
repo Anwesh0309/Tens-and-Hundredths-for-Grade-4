@@ -156,8 +156,8 @@ export default function ReflectPhase({ worldScores, xp, maxStreak, badges, onPla
 
           {/* CTAs */}
           <div className="reflect-ctas">
-            <button className="btn btn-primary" onClick={onPlayAgain} aria-label="Play again from the beginning">
-              🎮 Play Again
+            <button className="btn btn-primary" onClick={onPlayAgain} aria-label="Practice again from the beginning">
+              🎮 Practice Again
             </button>
             <button className="btn btn-secondary" onClick={onHome} aria-label="Return to home screen">
               🏠 Home

@@ -28,8 +28,8 @@ export default function SimulatePhase({ stationsComplete, onCompleteStation, onC
     return () => { clearTimeout(t); stopNarration(); };
   }, [activeStation, audioEnabled]);
 
-  // Station N is accessible only if station N-1 is complete (or N === 0)
-  const canAccess = (id) => id === 0 || stationsComplete[id - 1];
+  // All stations unlocked and accessible
+  const canAccess = () => true;
 
   // Called by each station after exactly 1 correct answer — does NOT auto-switch tab
   const handleStationComplete = (id) => {
@@ -58,11 +58,10 @@ export default function SimulatePhase({ stationsComplete, onCompleteStation, onC
             <button
               key={s.id}
               className={`station-tab ${active ? 'active' : ''} ${done ? 'done' : ''}`}
-              disabled={!accessible}
-              onClick={() => accessible && setActiveStation(s.id)}
+              onClick={() => setActiveStation(s.id)}
               role="tab"
               aria-selected={active}
-              aria-label={`Station ${s.letter}: ${s.name}${done ? ' (done)' : !accessible ? ' (locked)' : ''}`}
+              aria-label={`Station ${s.letter}: ${s.name}${done ? ' (done)' : ''}`}
             >
               <span className="tab-letter">{done ? '✓' : s.letter}</span>
               <span className="tab-label">{s.icon} {s.name}</span>
@@ -122,21 +121,9 @@ export default function SimulatePhase({ stationsComplete, onCompleteStation, onC
             ← Previous
           </button>
 
-          {/* Right-side buttons depend on state */}
+          {/* Right-side buttons */}
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            {/* If all done → show Play Now */}
-            {allDone && (
-              <button
-                className="btn btn-primary"
-                onClick={onComplete}
-                aria-label="Continue to Play phase"
-              >
-                🎮 Play Now!
-              </button>
-            )}
-
-            {/* If current station just completed and there's a next station → offer Go to Next */}
-            {!allDone && currentStationDone && activeStation < 3 && (
+            {activeStation < 3 && (
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() => setActiveStation(s => s + 1)}
@@ -146,18 +133,13 @@ export default function SimulatePhase({ stationsComplete, onCompleteStation, onC
               </button>
             )}
 
-            {/* If current station NOT done and not last → offer Next (disabled hint) */}
-            {!currentStationDone && activeStation < 3 && (
-              <button
-                className="btn btn-secondary btn-sm"
-                disabled
-                title="Complete this station first"
-                aria-label="Next station (locked until this station is complete)"
-                style={{ opacity: 0.38 }}
-              >
-                Next Station →
-              </button>
-            )}
+            <button
+              className="btn btn-primary"
+              onClick={onComplete}
+              aria-label="Continue to Practice phase"
+            >
+              🎮 Practice Now!
+            </button>
           </div>
         </div>
       </div>

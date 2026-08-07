@@ -29,8 +29,8 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
 
   return (
     <div className="story-screen" role="main" aria-label={`Story panel ${panelIndex + 1} of ${total}`}>
-      {/* Progress bar */}
-      <div style={{ width: '100%' }}>
+      {/* Progress bar header */}
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 4 }}>
         <div className="story-progress-bar-wrap">
           <div
             className="story-progress-bar-fill"
@@ -41,7 +41,12 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
             aria-valuemax={total}
           />
         </div>
-        <div className="story-progress-label">{panelIndex + 1} / {total}</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 13, fontWeight: 900, color: '#ffd54f', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            📖 Story Adventure · Panel {panelIndex + 1}
+          </span>
+          <span className="story-progress-label">{panelIndex + 1} / {total}</span>
+        </div>
       </div>
 
       {/* Story card */}
@@ -70,7 +75,7 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
           {/* Always show emoji caption */}
           <div style={{
             position: 'absolute', bottom: 12, left: '50%',
-            transform: 'translateX(-50%)', zIndex: 2
+            transform: 'translateX(-50%)', zIndex: 2, width: '90%', textAlign: 'center'
           }}>
             <div className="story-image-caption">
               ✨ {panel.imageCaption}
@@ -81,24 +86,18 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
         {/* Text panel */}
         <div className="story-text-panel">
           <h2 className="story-panel-title">{panel.title}</h2>
-          <p className="story-body">{panel.body}</p>
+          
+          <p className="story-body">
+            {panel.body}
+          </p>
 
           <div className="story-question-chip" aria-label="Key question">
             ✦ {panel.questionChip} ✦
           </div>
 
           {/* Math fact highlight */}
-          <div style={{
-            background: 'rgba(255,193,7,0.12)',
-            border: '1px solid rgba(255,193,7,0.3)',
-            borderRadius: '8px',
-            padding: '8px 12px',
-            fontSize: '13px',
-            fontWeight: 800,
-            color: '#ffd54f',
-            textAlign: 'center',
-          }} aria-label="Math fact">
-            📐 {panel.mathFact}
+          <div className="story-math-fact" aria-label="Math fact">
+            📐 <strong>Key Fact:</strong> {panel.mathFact}
           </div>
 
           {/* Mascot */}
@@ -122,12 +121,14 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
 
         <div className="story-dots" role="tablist" aria-label="Story panels">
           {storyPanels.map((_, i) => (
-            <div
+            <button
               key={i}
+              type="button"
               className={`story-dot ${i === panelIndex ? 'active' : ''}`}
+              onClick={() => setPanelIndex(i)}
               role="tab"
               aria-selected={i === panelIndex}
-              aria-label={`Panel ${i + 1}`}
+              aria-label={`Go to story panel ${i + 1}`}
             />
           ))}
         </div>
@@ -135,9 +136,9 @@ export default function StoryPhase({ onComplete, audioEnabled }) {
         <button
           className="btn btn-primary btn-sm"
           onClick={goNext}
-          aria-label={panelIndex < total - 1 ? 'Next panel' : 'Continue to Simulate'}
+          aria-label={panelIndex < total - 1 ? 'Next panel' : 'Continue to Practice'}
         >
-          {panelIndex < total - 1 ? 'Next →' : 'Continue →'}
+          {panelIndex < total - 1 ? 'Next Panel →' : 'Continue →'}
         </button>
       </div>
     </div>

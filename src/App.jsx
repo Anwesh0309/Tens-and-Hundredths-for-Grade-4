@@ -73,7 +73,7 @@ const PHASES = [
   { id: 'wonder',   label: 'Wonder',   icon: '🔍', num: '01' },
   { id: 'story',    label: 'Story',    icon: '📖', num: '02' },
   { id: 'simulate', label: 'Simulate', icon: '✏️',  num: '03' },
-  { id: 'play',     label: 'Play',     icon: '🎮', num: '04' },
+  { id: 'play',     label: 'Practice', icon: '🎮', num: '04' },
   { id: 'reflect',  label: 'Reflect',  icon: '🪞', num: '05' },
 ];
 
@@ -102,7 +102,11 @@ export default function App() {
     return () => clearTimeout(toastTimer.current);
   }, [state.toastBadge]);
 
-  const goTo = useCallback((phase) => { stopNarration(); dispatch({ type: 'SET_PHASE', phase }); }, []);
+  const goTo = useCallback((phase) => {
+    stopNarration();
+    const validPhase = typeof phase === 'string' && phase ? phase : 'wonder';
+    dispatch({ type: 'SET_PHASE', phase: validPhase });
+  }, []);
   const completePhase = useCallback((phase) => dispatch({ type: 'COMPLETE_PHASE', phase }), []);
 
   const handleCompleteWorld = useCallback((worldIndex, score) => {
@@ -123,7 +127,13 @@ export default function App() {
   const renderPhase = () => {
     switch (state.phase) {
       case 'intro':
-        return <IntroScreen onBegin={() => goTo('wonder')} audioEnabled={state.audioEnabled} />;
+        return (
+          <IntroScreen
+            onBegin={(targetPhase) => goTo(typeof targetPhase === 'string' ? targetPhase : 'wonder')}
+            audioEnabled={state.audioEnabled}
+            onToggleAudio={() => dispatch({ type: 'TOGGLE_AUDIO' })}
+          />
+        );
       case 'wonder':
         return <WonderPhase onComplete={() => { completePhase('wonder'); goTo('story'); }} audioEnabled={state.audioEnabled} />;
       case 'story':
@@ -164,35 +174,45 @@ export default function App() {
     <div className="app-shell">
       <FloatingNumbers />
 
-      {/* Top bar — transparent, no border */}
+      {/* Top bar — for active learning phases */}
       {state.phase !== 'intro' && (
         <header className="top-bar">
           <button className="home-btn" onClick={handleReset} aria-label="Return home">
             🏠 Home
           </button>
 
-          <nav className="phase-nav" aria-label="Learning phases">
-            {PHASES.map((ph, i) => {
-              const isActive = state.phase === ph.id;
-              const isCompleted = state.phaseComplete[ph.id];
-              const isPast = phaseIndex > i;
-              return (
-                <div key={ph.id} style={{ display: 'flex', alignItems: 'center' }}>
-                  {i > 0 && <div className={`phase-connector ${isPast || isCompleted ? 'done' : ''}`} />}
-                  <div className={`phase-pill ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
-                    aria-current={isActive ? 'step' : undefined}>
-                    <span>{isCompleted ? '✓' : ph.icon}</span>
-                    <span className="phase-label">{ph.label}</span>
+          <div className="nav-group">
+            <nav className="phase-nav" aria-label="Learning phases">
+              {PHASES.map((ph, i) => {
+                const isActive = state.phase === ph.id;
+                const isCompleted = state.phaseComplete[ph.id];
+                const isPast = phaseIndex > i;
+                return (
+                  <div key={ph.id} style={{ display: 'flex', alignItems: 'center' }}>
+                    {i > 0 && <div className={`phase-connector ${isPast || isCompleted ? 'done' : ''}`} />}
+                    <button
+                      type="button"
+                      className={`phase-pill ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
+                      onClick={() => goTo(ph.id)}
+                      aria-current={isActive ? 'step' : undefined}
+                      aria-label={`Go to ${ph.label} phase`}
+                    >
+                      <span>{isCompleted ? '✓' : ph.icon}</span>
+                      <span className="phase-label">{ph.label}</span>
+                    </button>
                   </div>
-                </div>
-              );
-            })}
-          </nav>
+                );
+              })}
+            </nav>
 
-          <button className="audio-btn" onClick={() => dispatch({ type: 'TOGGLE_AUDIO' })}
-            aria-label={state.audioEnabled ? 'Mute audio' : 'Unmute audio'}>
-            {state.audioEnabled ? '🔊' : '🔇'}
-          </button>
+            <button
+              className="audio-btn"
+              onClick={() => dispatch({ type: 'TOGGLE_AUDIO' })}
+              aria-label={state.audioEnabled ? 'Mute audio' : 'Unmute audio'}
+            >
+              {state.audioEnabled ? '🔊' : '🔇'}
+            </button>
+          </div>
         </header>
       )}
 
